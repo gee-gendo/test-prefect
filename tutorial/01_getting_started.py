@@ -11,7 +11,7 @@ def get_customer_ids(num: int) -> list[str]:
 @task
 def process_customer(customer_id: str) -> str:
     # Process a single customer
-    time.sleep(10)
+    time.sleep(1)
     return f"Processed {customer_id}"
 
 
