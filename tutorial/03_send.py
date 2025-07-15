@@ -33,7 +33,8 @@ async def greeter():
         if name_input.value == EXIT_SIGNAL:
             print("Goodbye!")
             return
-        await name_input.respond(f"Hello, {name_input.value}!")
+        print(f"Received name: {name_input.value}")
+        # await name_input.respond(f"Hello, {name_input.value}!")
 
         seen_keys_block.value.append(name_input.metadata.key)
         await seen_keys_block.save(
