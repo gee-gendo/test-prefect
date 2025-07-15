@@ -2,6 +2,7 @@ from prefect import flow, task
 import random
 import time
 
+
 @task
 def get_customer_ids(num: int) -> list[str]:
     # Fetch customer IDs from a database or API
@@ -21,7 +22,3 @@ def main(num: int, sleep_time: int) -> list[str]:
     # Map the process_customer task across all customer IDs
     results = process_customer.map(customer_ids, sleep_time)
     return results
-
-
-# if __name__ == "__main__":
-#     main(4, 1)
