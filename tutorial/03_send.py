@@ -34,13 +34,13 @@ async def greeter():
             print("Goodbye!")
             return
         print(f"Received name: {name_input.value}")
-        await name_input.respond(f"Hello, {name_input.value}!")
 
         seen_keys_block.value.append(name_input.metadata.key)
         await seen_keys_block.save(
             name=block_name,
             overwrite=True
         )
+        await name_input.respond(f"Hello, {name_input.value}!")
 
 
 @flow
