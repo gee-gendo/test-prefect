@@ -10,7 +10,7 @@ from prefect.input.run_input import receive_input, send_input
 EXIT_SIGNAL = "__EXIT__"
 
 
-@flow
+@flow(log_prints=True)
 async def greeter():
     run_context = get_run_context()
     assert run_context.flow_run, "Could not see my flow run ID"
