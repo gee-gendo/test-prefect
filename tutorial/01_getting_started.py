@@ -9,19 +9,19 @@ def get_customer_ids(num: int) -> list[str]:
 
 
 @task
-def process_customer(customer_id: str) -> str:
+def process_customer(customer_id: str, sleep_time: int) -> str:
     # Process a single customer
-    time.sleep(1)
+    time.sleep(sleep_time)
     return f"Processed {customer_id}"
 
 
 @flow
-def main() -> list[str]:
-    customer_ids = get_customer_ids(10)
+def main(num: int, sleep_time: int) -> list[str]:
+    customer_ids = get_customer_ids(num)
     # Map the process_customer task across all customer IDs
-    results = process_customer.map(customer_ids)
+    results = process_customer.map(customer_ids, sleep_time)
     return results
 
 
 if __name__ == "__main__":
-    main()
+    main(4, 1)
