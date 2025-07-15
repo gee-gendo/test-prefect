@@ -17,7 +17,7 @@ def process_customer(customer_id: str, sleep_time: int) -> str:
 
 
 @flow
-def main(num: int, sleep_time: int) -> list[str]:
+def main(num: int = 4, sleep_time: int = 1) -> list[str]:
     customer_ids = get_customer_ids(num)
     # Map the process_customer task across all customer IDs
     results = process_customer.map(customer_ids, sleep_time)
