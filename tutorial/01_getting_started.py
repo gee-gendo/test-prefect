@@ -23,5 +23,5 @@ def main(num: int, sleep_time: int) -> list[str]:
     return results
 
 
-if __name__ == "__main__":
-    main(4, 1)
+# if __name__ == "__main__":
+#     main(4, 1)
