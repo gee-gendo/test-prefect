@@ -90,6 +90,15 @@ def request(
     return response
 
 
+def get_runpod_api_key() -> str:
+    api_key = os.getenv("RUNPOD_API_KEY")
+    if api_key:
+        return api_key
+    else:
+        secret = Secret.load("runpod-api-key-dev")
+        return secret.get()
+
+
 @task
 def post_runpod_job(job: dict) -> dict:
     logger = get_run_logger()
@@ -127,23 +136,20 @@ def post_runpod_job(job: dict) -> dict:
         )
         logger.info(f"RunPod API response ({response.status}): {response.body}")
         if response.status == 200:
-            if response.json().get("status").upper() in ["COMPLETED", "FAILED", "TIMED_OUT", "CANCELLED"]:
+            if response.json().get("status").upper() in [
+                "COMPLETED",
+                "FAILED",
+                "TIMED_OUT",
+                "CANCELLED",
+            ]:
                 break
         time.sleep(1)
     # Parse and return the JSON response
     return response.json()
 
-def get_runpod_api_key() -> str:
-    api_key = os.getenv("RUNPOD_API_KEY")
-    if api_key:
-        return api_key
-    else:
-        secret = Secret.load("runpod-api-key-dev")
-        return secret.get()
-
 
 @flow
-def render(job: dict) -> dict:
+def render(job: dict = {}) -> dict:
     input_image = "https://gendo-gee-dev.s3.amazonaws.com/test/base_interior.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIAQ2GNW6JS4PXMQRNG%2F20250716%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250716T124443Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEEUaCWV1LXdlc3QtMiJHMEUCIQD5dJPc0x85cDKIpqct2g558lXjJX1sGvF2qCXT7lyDuwIgD%2Fejt5A3hcIW%2FG2p3pmLA9Kq4uWsHfOVZnZXBRPfBn4qoAIIXhABGgwwNTYyNjU5OTQ4NTMiDPJd2SfErnQPS9FNRir9AYzFlr0wz4Fpc7H%2Btqke2Pxa%2F2Zhcph1KLHqcOQOArlXx12ufmTHGUtVXNg%2Fuz69O%2Fow021FQbupl7TE0WYx95lnTUryD1arJmOZ23Kxyu%2BEcPo7TwRqNOzAje2bb1%2B7yVw5eoocbMbUCxoMnlUCwcYAyUWDG3ePRLU6aaN%2FdiLbI89EhVrl%2FIBX73jPvWS9uHKqWQioNyQBej5%2FVV7oZJUvbm9pplh62ZX5dN2VnnCFNNcjjlbP9jwuwI6xrJSDdk8lICzAPMXcwcIJOYk%2FnNZ%2BFn5dvYrD4XdceugPEEcyy0BQH6LE8fvFbw8KELnmAo%2Fji%2FMECXgAdHUR33MwmL3ewwY6nQHB34LviwtOVff4SqT8B6SlXrOf7RhpfdaX0VcGQj0vLNCoSXleGYwdE67rYahv3kc4QUVPbGg6GISLSpzFeaLkz3lYYgCqcQV77zw8D12eh94Or3QponiAN2NeuPs1STOXgu1jr9PcM0PlZ9vChg6m%2FI5gvXLgaOdxTZLn1wAG1f0xQ%2FXgbKftLq919qweRHBVADcKeZsosNA56808&X-Amz-Signature=390274070e79ae720457ef8dfa84dc37e49967e14f6ecb45638f4676f6ceeaff"
     ref_image = "https://gendo-gee-dev.s3.amazonaws.com/test/standing-06.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIAQ2GNW6JSXZVCBIHN%2F20250716%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250716T133412Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEEYaCWV1LXdlc3QtMiJHMEUCIGNYHi70r5E4yZ4%2BOxmyBvR1gLIWh43vAuCPFMh0F8l2AiEAlieIOT0qDMXS3AddWmUfewyiIcUaJTDmd4wrlblHBwsqoAIIXxABGgwwNTYyNjU5OTQ4NTMiDIeDWKdosiMa0cOHgir9AdPc4zo%2BSgswdNAcGK%2FYqkYvCOU68jC4bA%2BSJ8I%2FTo9xZ%2FOPyUo26cVYPaMmozBods0EljE%2FZvZdYnOtxvUDYSSYuMdvht87%2FCVcHk%2Fsf0Z%2F7%2BOzC7Gzsd5w%2BKDUuKdaA9F6I%2Bdk6oNILevetLkTX%2FbsgzA9YYz7s3XybEGqWgkGkFZfteV7bei0UAgdw95Mpnu4cBFNN%2BUjbK0Xdz0XNNBOlH1Gw9GGnDJyTdbap4C0cPT3OFplfzb0Hg1FO1OrRJGn9ar2vpg%2FteoUthaqIy7bcK5zUN9qgYBYhdrk5S902HESwBXPgjiT8JDFmgz8iIWi0MEWOi2lFuZKANYwxtTewwY6nQFuL%2FmRovrK4NL%2BbsOAXguF79WozlPK1j93YfqO5XnMYdlyp3nbGUThiykqdVfN14oISgGQU8T0IRRUc6PQs61fhS7odF2dVMkbme%2F7A%2BAQG7X5E9%2BZOSzJ59AlM4UcumhQQeXtOKXOQfD8vHfFjk0zCV33TUWiCN0Gm0iM1J%2Bpn2JiO1hq3dR27F7VAEltADhZZEg5tPDn8JGb4G7x&X-Amz-Signature=bb41c88584f3a87029ffe4af79ef1bad01d287fab31407b7638cc7039e27ebc3"
     upload_url = "https://gendo-gee-dev.s3.amazonaws.com/test/prefect-output.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIAQ2GNW6JSXZVCBIHN%2F20250716%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250716T133447Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEEYaCWV1LXdlc3QtMiJHMEUCIGNYHi70r5E4yZ4%2BOxmyBvR1gLIWh43vAuCPFMh0F8l2AiEAlieIOT0qDMXS3AddWmUfewyiIcUaJTDmd4wrlblHBwsqoAIIXxABGgwwNTYyNjU5OTQ4NTMiDIeDWKdosiMa0cOHgir9AdPc4zo%2BSgswdNAcGK%2FYqkYvCOU68jC4bA%2BSJ8I%2FTo9xZ%2FOPyUo26cVYPaMmozBods0EljE%2FZvZdYnOtxvUDYSSYuMdvht87%2FCVcHk%2Fsf0Z%2F7%2BOzC7Gzsd5w%2BKDUuKdaA9F6I%2Bdk6oNILevetLkTX%2FbsgzA9YYz7s3XybEGqWgkGkFZfteV7bei0UAgdw95Mpnu4cBFNN%2BUjbK0Xdz0XNNBOlH1Gw9GGnDJyTdbap4C0cPT3OFplfzb0Hg1FO1OrRJGn9ar2vpg%2FteoUthaqIy7bcK5zUN9qgYBYhdrk5S902HESwBXPgjiT8JDFmgz8iIWi0MEWOi2lFuZKANYwxtTewwY6nQFuL%2FmRovrK4NL%2BbsOAXguF79WozlPK1j93YfqO5XnMYdlyp3nbGUThiykqdVfN14oISgGQU8T0IRRUc6PQs61fhS7odF2dVMkbme%2F7A%2BAQG7X5E9%2BZOSzJ59AlM4UcumhQQeXtOKXOQfD8vHfFjk0zCV33TUWiCN0Gm0iM1J%2Bpn2JiO1hq3dR27F7VAEltADhZZEg5tPDn8JGb4G7x&X-Amz-Signature=d33e1bfc99b46b4ae310454dca574b1f6b0a9ec071c6532126cc4462e87cba90"
@@ -172,9 +178,12 @@ def render(job: dict) -> dict:
             "external_webhook_url": None,  # Required for speckle handler
         },
     }
+    if job == {}:
+        raise ValueError("Job is empty")
+
     return post_runpod_job(job)
 
 
-if __name__ == "__main__":  
+if __name__ == "__main__":
     job = {}
-    render(job)
+    render.fn(job)
