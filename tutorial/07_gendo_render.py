@@ -36,7 +36,7 @@ class RenderJob(BaseModel):
     depth_strength: float = 0.0
     # IP adapter parameters
     ref_image: str | None = None
-    image_prompt_strength: float = 1.0
+    image_prompt_strength: float | None = None
     # System parameters
     system_negative_prompt: str = "ugly, pixel art"
     safety_checker_threshold: float = 0.5
