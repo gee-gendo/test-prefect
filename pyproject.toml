@@ -15,11 +15,13 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = [
-    "ruff>=0.9.9",
-    "types-requests>=2.32.4.20250809",
-]
+dev = ["ruff>=0.9.9", "types-requests>=2.32.4.20250809"]
 
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
