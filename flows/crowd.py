@@ -1,22 +1,24 @@
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv()  # before importing prefect
 
 
-from prefect import flow
+from prefect import flow  # noqa: E402
 
-from lib.models.crowd import CrowdJob
-from lib.tasks.people_masking import generate_people_mask
-from lib.tasks.kontext import run_kontext
-from lib.tasks.refine_people import refine_people
-from lib.tasks.upload_to_url import upload_to_s3
+from lib.models.crowd import CrowdJob  # noqa: E402
+from lib.tasks.people_masking import generate_people_mask  # noqa: E402
+from lib.tasks.kontext import run_kontext  # noqa: E402
+from lib.tasks.refine_people import refine_people  # noqa: E402
+from lib.tasks.upload_to_url import upload_to_s3  # noqa: E402
 
 
 @flow
 def crowd(job: CrowdJob) -> dict:
     kontext_url = run_kontext(job.input_url, job.prompt, job.kontext)
     _ = generate_people_mask(kontext_url, job.mask_url, job.people_mask)
-    refined_image_url = refine_people(kontext_url, job.mask_url_read, job.clarity_upscale)
+    refined_image_url = refine_people(
+        kontext_url, job.mask_url_read, job.clarity_upscale
+    )
     success = upload_to_s3(refined_image_url, job.output_url)
 
     return {"output_url": job.output_url, "success": success}
