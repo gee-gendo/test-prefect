@@ -21,7 +21,7 @@ pull:
   - prefect.deployments.steps.git_clone:
       id: clone-step
       repository: "https://x-access-token:{{ get-github-token.stdout }}@github.com/gee-gendo/test-prefect-deployment.git"
-      branch: v3.4.8
+      branch: v3.5.0
 
   # - prefect.deployments.steps.pip_install_requirements:
   #     directory: "{{ clone-step.directory }}" # `clone-step` is a user-provided `id` field
@@ -40,6 +40,18 @@ deployments:
     schedule: {}
     flow_name: null
     entrypoint: flows/crowd.py:crowd
+    parameters: {}
+    work_pool:
+      name: null
+      work_queue_name: null
+      job_variables: {}
+  - name: render
+    version: null
+    tags: []
+    description: null
+    schedule: {}
+    flow_name: null
+    entrypoint: flows/render.py:render
     parameters: {}
     work_pool:
       name: null
