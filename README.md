@@ -45,3 +45,9 @@ prefect deploy
 ```
 
 You can then trigger the flow / deployment on the UI or any other ways
+
+### ⚠️ 🐍 Important python deployment quirk
+
+Prefect requires a "pull" step to install the python dependencies in the worker. This is configured in the [prefect config](./prefect.yaml). The commented example with pip requires the silly "." [pip requirements](./requirements.txt). Alternatively, the uncommented `run_shell_script` runs pip on the project.
+
+⚠️ All the requirements should be in the [pyproject](./pyproject.toml) file!! ⚠️
