@@ -14,8 +14,8 @@ class CrowdJob(BaseModel):
     output_url: str
     kontext: KontextParams = KontextParams()
     people_mask: PeopleMaskParams = PeopleMaskParams()
-    seed: int = 123
     clarity_upscale: ClarityUpscaleParams = ClarityUpscaleParams()
+    seed: int = 123
 
     @model_validator(mode="after")
     def inject_dependent_attributes(self):

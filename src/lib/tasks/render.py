@@ -7,12 +7,15 @@ from lib.runpod_client import get_runpod_api_key, run_runpod_job
 RENDER_ENDPOINT_ID = "oh1xx5fpoeogpw"
 
 
-@task
+@task(log_prints=True)
 def run_render_runpod(job: dict) -> dict:
     logger = get_run_logger()
 
     # Get API key from environment
     api_key = get_runpod_api_key()
+    import json
+
+    print(json.dumps(job, indent=4))
 
     # Construct the RunPod API URL
     r = run_runpod_job(job, logger, api_key, RENDER_ENDPOINT_ID)

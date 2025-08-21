@@ -1,4 +1,4 @@
-from enum import StrEnum
+from enum import StrEnum, auto
 
 
 from pydantic import BaseModel, Field
@@ -38,8 +38,8 @@ class ClarityScheduler(StrEnum):
 
 
 class ImageOutputFormat(StrEnum):
-    PNG = "png"
-    JPEG = "jpeg"
+    PNG = auto()
+    JPEG = auto()
 
 
 class ClarityUpscaleParams(BaseModel):

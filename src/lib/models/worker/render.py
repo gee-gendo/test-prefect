@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 
-class RenderJob(BaseModel):
+class RenderParameters(BaseModel):
     prompt: str
     input_image_presigned_url: str
     upload_url: str

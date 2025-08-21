@@ -1,22 +1,23 @@
-from dotenv import load_dotenv
+from prefect import flow, task
 
+from lib.models.worker import WorkerParams, WorkerFeature
 from lib.models.worker.render import RenderParameters
-from lib.models.worker.worker import WorkerFeature, WorkerJob, WorkerParams
+from lib.models.worker.worker import WorkerJob
 
-load_dotenv()  # before importing prefect
 
-from prefect import flow  # noqa: E402
-
-from lib.tasks.render import run_render_runpod  # noqa: E402
+@task
+def fake_render(render_job: WorkerJob) -> str:
+    print(render_job)
+    return render_job.input.generation_job_id
 
 
 @flow
-def render(render_job: WorkerJob) -> dict:
+def dont_render(render_job: WorkerJob) -> str:
     """
     Render a job using the RunPod API.
     """
 
-    return run_render_runpod(render_job.model_dump())
+    return fake_render(render_job)
 
 
 if __name__ == "__main__":
@@ -31,5 +32,5 @@ if __name__ == "__main__":
             ),
         )
     )
-    result = render(job)
-    print(result)
+
+    dont_render(job)
