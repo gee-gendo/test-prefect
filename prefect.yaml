@@ -16,20 +16,20 @@ push: null
 pull:
   - prefect.deployments.steps.run_shell_script:
       id: get-github-token
-      script: uv tool run prefect-cloud github token gee-gendo/test-prefect-deployment
+      script: uv tool run prefect-cloud github token GendoAI/prefect-flow
 
   - prefect.deployments.steps.git_clone:
       id: clone-step
-      repository: "https://x-access-token:{{ get-github-token.stdout }}@github.com/gee-gendo/test-prefect-deployment.git"
-      branch: v3.6.0
+      repository: "https://x-access-token:{{ get-github-token.stdout }}@github.com/GendoAI/prefect-flow.git"
+      branch: v3.7.0
 
-  - prefect.deployments.steps.pip_install_requirements:
-      directory: "{{ clone-step.directory }}" # `clone-step` is a user-provided `id` field
-      requirements_file: requirements.txt  # the requirements.txt just points to the pyproject.toml
-
-  # - prefect.deployments.steps.run_shell_script:
+  # - prefect.deployments.steps.pip_install_requirements:
   #     directory: "{{ clone-step.directory }}" # `clone-step` is a user-provided `id` field
-  #     script: pip install .
+  #     requirements_file: requirements.txt  # the requirements.txt just points to the pyproject.toml
+
+  - prefect.deployments.steps.run_shell_script:
+      directory: "{{ clone-step.directory }}" # `clone-step` is a user-provided `id` field
+      script: pip install .
 
 # the deployments section allows you to provide configuration for deploying flows
 deployments:

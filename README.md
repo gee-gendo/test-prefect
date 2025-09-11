@@ -13,7 +13,7 @@ Copy the repo and setup local environment
 
 ```bash
 # 1. Clone the repo
-git clone git@github.com:gee-gendo/test-prefect-deployment.git
+git clone git@github.com:GendoAI/prefect-flow.git
 
 # 2. Setup python env with uv (optional, it will be lazy loaded by uv but worth doing)
 uv sync
