@@ -11,12 +11,12 @@ from lib.tasks.render import run_render_runpod  # noqa: E402
 
 
 @flow
-def render(render_job: WorkerJob) -> dict:
+def render(job: WorkerJob) -> dict:
     """
     Render a job using the RunPod API.
     """
 
-    return run_render_runpod(render_job.model_dump())
+    return run_render_runpod(job.model_dump())
 
 
 if __name__ == "__main__":
