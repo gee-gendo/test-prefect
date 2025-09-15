@@ -21,7 +21,7 @@ pull:
   - prefect.deployments.steps.git_clone:
       id: clone-step
       repository: "https://x-access-token:{{ get-github-token.stdout }}@github.com/GendoAI/prefect-flow.git"
-      branch: v3.7.0
+      branch: v3.8.0
 
   # - prefect.deployments.steps.pip_install_requirements:
   #     directory: "{{ clone-step.directory }}" # `clone-step` is a user-provided `id` field
