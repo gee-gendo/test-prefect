@@ -1,6 +1,6 @@
 from prefect import flow, task
 
-from lib.models.worker import WorkerParams, WorkerFeature
+from lib.models.worker import RenderWorkerParams, WorkerFeature
 from lib.models.worker.render import RenderParameters
 from lib.models.worker.worker import WorkerJob
 
@@ -22,7 +22,7 @@ def dont_render(render_job: WorkerJob) -> str:
 
 if __name__ == "__main__":
     job = WorkerJob(
-        input=WorkerParams(
+        input=RenderWorkerParams(
             feature=WorkerFeature.RENDER,
             generation_job_id="prefect-0001",
             parameters=RenderParameters(

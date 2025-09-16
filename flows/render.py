@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 
 from lib.models.worker.render import RenderParameters
-from lib.models.worker.worker import WorkerFeature, WorkerJob, WorkerParams
+from lib.models.worker.worker import WorkerFeature, WorkerJob, RenderWorkerParams
 
 load_dotenv()  # before importing prefect
 
@@ -21,7 +21,7 @@ def render(job: WorkerJob) -> dict:
 
 if __name__ == "__main__":
     job = WorkerJob(
-        input=WorkerParams(
+        input=RenderWorkerParams(
             feature=WorkerFeature.RENDER,
             generation_job_id="prefect-0001",
             parameters=RenderParameters(

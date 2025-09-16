@@ -16,12 +16,12 @@ push: null
 pull:
   - prefect.deployments.steps.run_shell_script:
       id: get-github-token
-      script: uv tool run prefect-cloud github token GendoAI/prefect-flow
+      script: uv tool run prefect-cloud github token gee-gendo/test-prefect
 
   - prefect.deployments.steps.git_clone:
       id: clone-step
-      repository: "https://x-access-token:{{ get-github-token.stdout }}@github.com/GendoAI/prefect-flow.git"
-      branch: v3.8.0
+      repository: "https://x-access-token:{{ get-github-token.stdout }}@github.com/gee-gendo/test-prefect.git"
+      branch: v3.9.0
 
   # - prefect.deployments.steps.pip_install_requirements:
   #     directory: "{{ clone-step.directory }}" # `clone-step` is a user-provided `id` field

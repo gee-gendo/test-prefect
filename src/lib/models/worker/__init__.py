@@ -6,7 +6,7 @@ from .render import RenderParameters
 from .speckle import SpeckleParams
 from .style import StyleParams
 
-from .worker import WorkerFeature, WorkerParams
+from .worker import WorkerFeature
 
 
 __all__ = [
@@ -18,5 +18,4 @@ __all__ = [
     "SpeckleParams",
     "StyleParams",
     "WorkerFeature",
-    "WorkerParams",
 ]
