@@ -15,8 +15,8 @@ def run_render_runpod(job: dict) -> dict:
     api_key = get_runpod_api_key()
 
     # TODO: remove this once the upload_url is renamed downstream
-    upload_url = job["input"]["render"]["parameters"].pop("upload_url")
-    job["input"]["render"]["parameters"]["output_image_presigned_url"] = upload_url
+    upload_url = job["input"]["parameters"].pop("output_image_presigned_url")
+    job["input"]["parameters"]["output_image_presigned_url"] = upload_url
 
     import json
 
