@@ -4,7 +4,7 @@ from pydantic import BaseModel
 class RenderParameters(BaseModel):
     prompt: str
     input_image_presigned_url: str
-    upload_url: str
+    output_image_presigned_url: str
     # controlnet parameters
     control_image_strength: float = 1.0
     canny_strength: float = 0.0

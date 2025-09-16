@@ -12,7 +12,7 @@ class CutoutParams(BaseModel):
     prompt: str
 
     # Commons
-    upload_url: str
+    output_image_presigned_url: str
     seed: int
     # Internals
     system_negative_prompt: str

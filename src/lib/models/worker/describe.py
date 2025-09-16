@@ -9,7 +9,7 @@ class DescribeParams(BaseModel):
     style_reference_image_presigned_url: str | None = None
     image_prompt_strength: float | None = None
     # Commons
-    upload_url: str
+    output_image_presigned_url: str
     seed: int
     # Internals
     system_negative_prompt: str

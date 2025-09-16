@@ -1,8 +1,8 @@
 from prefect import flow, task
 
-from lib.models.worker import RenderWorkerParams, WorkerFeature
+from lib.models.worker import WorkerFeature
 from lib.models.worker.render import RenderParameters
-from lib.models.worker.worker import WorkerJob
+from lib.models.worker.worker import RenderWorkerParams, WorkerJob
 
 
 @task

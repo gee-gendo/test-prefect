@@ -11,7 +11,7 @@ class StyleParams(BaseModel):
     prompt: str
     # Commons
     seed: int
-    upload_url: str
+    output_image_presigned_url: str
     # Internals
     system_negative_prompt: str
     safety_checker_threshold: float

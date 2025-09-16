@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 
 from lib.models.worker.render import RenderParameters
-from lib.models.worker.worker import WorkerFeature, WorkerJob, RenderWorkerParams
+from lib.models.worker.worker import RenderWorkerParams, WorkerFeature, WorkerJob
 
 load_dotenv()  # before importing prefect
 
