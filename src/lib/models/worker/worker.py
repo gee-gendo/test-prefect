@@ -133,6 +133,8 @@ if __name__ == "__main__":
     job = WorkerJob.model_validate(d["job"]).model_dump()
     # TODO: remove this once the upload_url is renamed downstream
     upload_url = job["input"]["parameters"].pop("output_image_presigned_url")
-    job["input"]["parameters"]["output_image_presigned_url"] = upload_url
+    job["input"]["parameters"]["upload_url"] = upload_url
 
-    print(job)
+    import json
+
+    print(json.dumps(job, indent=4))
